@@ -23,13 +23,14 @@ param (
     [string]$Level=$script:Level
 )
 if($script:ConfigFile -eq 'All'){$script:ConfigFile='*.config'}
-
 $path = Join-Path -Path ${env:ProgramFiles(x86)} -ChildPath "Airwatch\AgentUI"
 Get-ChildItem $path\$script:ConfigFile -Recurse | 
 ForEach-Object {
     [xml]$xmlDoc = Get-Content $_.FullName
     $node = $xmldoc.configuration.loggingConfiguration
     # change attribute on selected node
-    $node.value=$script:Level
-    $xmldoc.Save($_.FullName)
+    if($node){
+        $node.level=$script:Level
+        $xmldoc.Save($_.FullName)
+    }
 }
