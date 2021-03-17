@@ -10,16 +10,25 @@
 .DESCRIPTION
     Used to test the logging level of the Workspace ONE UEM Agent logs by reading the WS1 Agent config file(s)
     in C:\ProgramFiles(x86)\Airwatch\AgentUI and return exitcode 0 if same as level specified or exitcode 1 if not.
-    Add as custom script under Deployment Options > When to Call Install Complete.
+    
+    Used in conjunction with ChangeWS1LoggingLevel.ps1 in same repo for When to Call Install Complete logic
+    When to Call Install Complete:
+    Identify Application By: Using Custom Script
+    Script Type: Powershell
+    Command to run script: powershell.exe -ep bypass -file .\TestChangeWS1LoggingLevel.ps1 -ConfigFile TaskScheduler.exe.config -Level All
+    Success Exit Code: 0
     
     **** IMPORTANT ****
     -ConfigFile and -Level parameters should match the Install Command -ConfigFile and -Level parameters
 
 .EXAMPLE
+    Test if TaskScheduler.log is set to Debug
     powershell.exe -ep bypass -file .\TestChangeWS1LoggingLevel.ps1 -ConfigFile TaskScheduler.exe.config -Level Debug
 .EXAMPLE
+    Test if TaskScheduler.log is set to Information
     powershell.exe -ep bypass -file .\TestChangeWS1LoggingLevel.ps1 -ConfigFile TaskScheduler.exe.config -Level Information
 .EXAMPLE
+    Test if All logs are set to Debug
     powershell.exe -ep bypass -file .\TestChangeWS1LoggingLevel.ps1 -ConfigFile All -Level Debug
 #>
 param (

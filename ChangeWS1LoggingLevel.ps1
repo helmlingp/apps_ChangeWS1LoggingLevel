@@ -11,10 +11,26 @@
     Change the logging level of the Workspace ONE UEM Agent logs by editing the WS1 Agent config file(s)
     in C:\ProgramFiles(x86)\Airwatch\AgentUI
 
+    See TestChangeWS1LoggingLevel.ps1 in same repo for When to Call Install Complete logic
+
+    Install command: powershell.exe -ep bypass -file .\DeviceWipeWProvisioning.ps1
+    Uninstall command: powershell.exe -ep bypass -file .\ChangeWS1LoggingLevel.ps1 -ConfigFile All -Level Information
+    When to Call Install Complete:
+    Identify Application By: Using Custom Script
+    Script Type: Powershell
+    Command to run script: powershell.exe -ep bypass -file .\TestChangeWS1LoggingLevel.ps1 -ConfigFile TaskScheduler.exe.config -Level All
+    Success Exit Code: 0
+
 .EXAMPLE
-    .\ChangeWS1LoggingLevel.ps1 -ConfigFile TaskScheduler.exe.config -Level Debug
-    .\ChangeWS1LoggingLevel.ps1 -ConfigFile TaskScheduler.exe.config -Level Information
-    .\ChangeWS1LoggingLevel.ps1 -ConfigFile All -Level Debug
+    Set TaskScheduler.log logging to Debug:
+    powershell.exe -ep bypass -file .\ChangeWS1LoggingLevel.ps1 -ConfigFile TaskScheduler.exe.config -Level Debug
+.EXAMPLE
+    Set TaskScheduler.log logging to Information (default):
+    powershell.exe -ep bypass -file .\ChangeWS1LoggingLevel.ps1 -ConfigFile TaskScheduler.exe.config -Level Information
+.EXAMPLE
+    Set All logs to Debug
+    powershell.exe -ep bypass -file .\ChangeWS1LoggingLevel.ps1 -ConfigFile All -Level Debug
+
 #>
 param (
     [Parameter(Mandatory=$true)]
