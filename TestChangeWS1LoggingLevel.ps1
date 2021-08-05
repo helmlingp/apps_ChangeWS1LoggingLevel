@@ -42,17 +42,35 @@ $ec = 1
 
 if($script:ConfigFile -eq 'All'){$script:ConfigFile='*.config'}
 $path = Join-Path -Path ${env:ProgramFiles(x86)} -ChildPath "Airwatch\AgentUI"
-Get-ChildItem $path\$script:ConfigFile -Recurse | 
-ForEach-Object {
-    [xml]$xmlDoc = Get-Content $_.FullName
-    $node = $xmldoc.configuration.loggingConfiguration
-    # change attribute on selected node
+
+Get-ChildItem $path\$script:ConfigFile -Recurse | ForEach-Object {
+    [xml]$xml = Get-Content -Path $_.FullName
+    #Test for old path in XML
+    $node = $xml.configuration.loggingConfiguration
     if($node){
-        
-        $nodelevel = $node.level
-        
-        if($nodelevel -eq $script:Level){
-            $ec = 0
+        # test for attribute on selected node
+        if(!$node){
+            write-host "no logging config in file $_"
+        }else{
+
+            $nodelevel = $node.level
+
+            if($nodelevel -eq $script:Level){
+                $ec = 0
+            }
+        }
+    } else {
+        $node = $xml.configuration.appSettings.add | Where-Object {$_.key -eq "serilog:minimum-level"}
+        # test for attribute on selected node
+        if(!$node){
+            write-host "no logging config in file $_"
+        }else{
+
+            $nodelevel = $node.value
+
+            if($nodelevel -eq $script:Level){
+                $ec = 0
+            }
         }
     }
 }
